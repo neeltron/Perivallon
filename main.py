@@ -15,29 +15,14 @@ def index():
 
 
 
-# Creating different routes
-@app.route('/second')
-def second():
-  return "I'm on a separate route"
-
-
-
-# HTTP Methods
-@app.route('/requesthttp', methods=['GET', 'POST'])
-def requesthttp():
-  if request.method == 'POST':
-    return "Auth here"
-  else:
-    return "Ask for creds here"
-
-
-
 # File Uploads (needs an HTML Form)
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
-  if request.method == 'GET':
-    file = request.files['filename']
-    file.save('uploads/'+file)
+  if request.method == 'POST':
+    file = request.files['file']
+    file.save('uploads/'+file.filename)
+    return file.filename
+  return "not here yet"
   
 
 
