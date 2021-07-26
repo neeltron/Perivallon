@@ -1,6 +1,19 @@
 from flask import Flask, render_template, request, make_response, redirect, url_for
+import os
+import io
 
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "cognitio-7378d-dc91500811d5.json"
 
+def detect(img):
+  from google.cloud import vision
+  client = vision.ImageAnnotatorClient()
+  file_name = os.path.abspath(img)
+  with io.open(file_name, 'rb') as image_file:
+    content = image_file.read()
+  image = vision.Image(content=content)
+  response = client.label_detection(image=image)
+  labels = response.label_annotations
+  return str(labels[0].description)
 
 app = Flask(
   __name__,
@@ -20,16 +33,15 @@ def index():
 def upload_file():
   if request.method == 'POST':
     file = request.files['file']
-    file.save('uploads/'+file.filename)
-    return file.filename
+    file.save('uploads/' + file.filename)
+    labels = detect('uploads/' + file.filename)
+    file.close()
+    newf = open('data.csv', 'a')
+    newf.write(file.filename + ", " + labels + "\n")
+    newf.close()
+    return labels
+    
   return "not here yet"
-  
-
-
-# Redirects
-@app.route('/redirect')
-def redirec():
-  return redirect(url_for('index'))
 
 
 
