@@ -3,11 +3,21 @@
     <title>
       Perivallon
     </title>
+    <script>
+      function clickit() {
+        document.getElementById("thisdude").click();
+      }
+    </script>
   </head>
   <body>
+    <center>
     <form action = "/upload" method = "post" enctype="multipart/form-data">  
-        <input type="file" name="file" />  
-        <input type = "submit" value="Upload">  
-    </form>  
+        <input type = "button" name = "fake" style="width: 400px; height: 100px" onclick="clickit()" value="Choose a file">
+        <br>
+        <input type="file" name="file" type="hidden" style="opacity: 0;" id="thisdude">
+        <br>
+        <input type = "submit" value="Upload" style="width: 400px; height: 100px"/>  
+    </form> 
+    </center> 
   </body>
 </html>
